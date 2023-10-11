@@ -55,7 +55,7 @@ const users = reactive([
 </script>
 
 <template>
-  <aside class="sidebar">
+  <aside id="sidebar">
     <Filtro />
 
     <ul>
@@ -71,9 +71,9 @@ const users = reactive([
 </template>
 
 <style lang="scss" scoped>
-.sidebar {
+#sidebar {
   border-right: 1px solid var(--gray-border);
-  max-height: 550px;
+  max-height: calc(100vh - 24px);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {

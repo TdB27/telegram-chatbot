@@ -1,11 +1,13 @@
 <script setup>
 import Sidebar from "./SideBar.vue";
+import Content from "./Content.vue";
 </script>
 
 <template>
   <div class="card">
     <div id="chat-layout">
       <Sidebar class="col-4" />
+      <Content class="col-8" />
     </div>
   </div>
 </template>
