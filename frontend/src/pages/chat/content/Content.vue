@@ -4,19 +4,6 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const botUser = computed(() => store.state.botUser);
-
-const messages = reactive([
-  {
-    type: "user",
-    text: "texto do usuario",
-    time: "12:07",
-  },
-  {
-    type: "bot",
-    text: "texto do bot",
-    time: "12:09",
-  },
-]);
 </script>
 
 <template>

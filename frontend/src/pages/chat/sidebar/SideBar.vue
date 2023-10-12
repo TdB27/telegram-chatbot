@@ -1,6 +1,6 @@
 <script setup>
 import Filtro from "./Filtro.vue";
-import { reactive, computed } from "vue";
+import { reactive, ref } from "vue";
 
 import { useStore } from "vuex";
 
@@ -11,6 +11,17 @@ const users = bot.users.map((item) => {
   item.time = item.messages[item.messages.length - 1].time;
   return item;
 });
+
+let listUsers = ref([...users]);
+
+function search(event) {
+  listUsers.value = users.filter((item) => {
+    let name = item.name.toLowerCase();
+    let eventName = event.toLowerCase();
+
+    return name.includes(eventName);
+  });
+}
 
 const selectUser = (user) => store.dispatch("selectUser", { ...user });
 </script>
@@ -24,10 +35,10 @@ const selectUser = (user) => store.dispatch("selectUser", { ...user });
       </div>
     </div>
 
-    <Filtro />
+    <Filtro @search="search" />
 
-    <ul>
-      <li class="p-3" v-for="u in users" :key="u.id" @click="selectUser(u)">
+    <ul v-if="listUsers.length">
+      <li class="p-3" v-for="u in listUsers" :key="u.id" @click="selectUser(u)">
         <div class="img"></div>
         <div class="content">
           <div class="name">{{ u.name }}</div>
@@ -35,6 +46,7 @@ const selectUser = (user) => store.dispatch("selectUser", { ...user });
         </div>
       </li>
     </ul>
+    <p class="text-center" v-else>Não há registros nessa pesquisa</p>
   </aside>
 </template>
 
