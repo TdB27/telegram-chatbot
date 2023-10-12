@@ -5,10 +5,12 @@ const messages = reactive([
   {
     type: "user",
     text: "texto do usuario",
+    time: "12:07",
   },
   {
     type: "bot",
     text: "texto do bot",
+    time: "12:09",
   },
 ]);
 </script>
@@ -28,6 +30,7 @@ const messages = reactive([
         <span>
           {{ m.text }}
         </span>
+        <span class="time"> time</span>
       </p>
     </section>
     <section id="send-message">
@@ -91,12 +94,20 @@ const messages = reactive([
   }
 
   .message {
-    padding: 1rem;
+    padding: 0.5rem;
     margin-bottom: 8px;
     border-radius: 8px;
     font-size: 12px;
 
+    max-width: 55%;
+
     position: relative;
+
+    .time {
+      display: block;
+      font-size: 10px;
+      text-align: right;
+    }
 
     &::after {
       position: absolute;
