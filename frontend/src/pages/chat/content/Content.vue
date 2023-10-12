@@ -1,5 +1,9 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const botUser = computed(() => store.state.botUser);
 
 const messages = reactive([
   {
@@ -17,23 +21,23 @@ const messages = reactive([
 
 <template>
   <section id="content">
-    <header id="header" class="p-3">
+    <header id="header" class="p-3" v-if="botUser.id">
       <div class="img"></div>
-      <div class="name">Thiago</div>
+      <div class="name">{{ botUser.name }}</div>
     </header>
     <section id="main">
       <p
         class="message"
         :class="m.type == 'user' ? 'start' : 'end'"
-        v-for="(m, key) in messages"
+        v-for="(m, key) in botUser.messages"
         :key="key">
         <span>
           {{ m.text }}
         </span>
-        <span class="time"> time</span>
+        <span class="time"> {{ m.time }}</span>
       </p>
     </section>
-    <section id="send-message">
+    <section id="send-message" v-if="botUser.id">
       <input
         type="text"
         class="form-control"

@@ -1,57 +1,18 @@
 <script setup>
 import Filtro from "./Filtro.vue";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 
-const users = reactive([
-  {
-    name: "Thiago",
-    time: "13:04",
-  },
-  {
-    name: "Billy",
-    time: "Ontem",
-  },
-  {
-    name: "Santana",
-    time: "10:55",
-  },
-  {
-    name: "Thiago",
-    time: "13:04",
-  },
-  {
-    name: "Billy",
-    time: "Ontem",
-  },
-  {
-    name: "Santana",
-    time: "10:55",
-  },
-  {
-    name: "Thiago",
-    time: "13:04",
-  },
-  {
-    name: "Billy",
-    time: "Ontem",
-  },
-  {
-    name: "Santana",
-    time: "10:55",
-  },
-  {
-    name: "Thiago",
-    time: "13:04",
-  },
-  {
-    name: "Billy",
-    time: "Ontem",
-  },
-  {
-    name: "Santana",
-    time: "10:55",
-  },
-]);
+import { useStore } from "vuex";
+
+const store = useStore();
+const bot = reactive(store.state.bot);
+
+const users = bot.users.map((item) => {
+  item.time = item.messages[item.messages.length - 1].time;
+  return item;
+});
+
+const selectUser = (user) => store.dispatch("selectUser", { ...user });
 </script>
 
 <template>
@@ -59,14 +20,14 @@ const users = reactive([
     <div class="d-flex align-items-center p-3">
       <div class="img"></div>
       <div class="content">
-        <div class="name">Bot name</div>
+        <div class="name">{{ bot.name }}</div>
       </div>
     </div>
 
     <Filtro />
 
     <ul>
-      <li class="p-3" v-for="(u, key) in users" :key="key">
+      <li class="p-3" v-for="u in users" :key="u.id" @click="selectUser(u)">
         <div class="img"></div>
         <div class="content">
           <div class="name">{{ u.name }}</div>
@@ -81,6 +42,7 @@ const users = reactive([
 #sidebar {
   border-right: 1px solid var(--gray-border);
   max-height: calc(100vh - 24px);
+  min-height: calc(100vh - 24px);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
