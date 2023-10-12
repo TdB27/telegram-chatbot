@@ -56,6 +56,13 @@ const users = reactive([
 
 <template>
   <aside id="sidebar">
+    <div class="d-flex align-items-center p-3">
+      <div class="img"></div>
+      <div class="content">
+        <div class="name">Bot name</div>
+      </div>
+    </div>
+
     <Filtro />
 
     <ul>
@@ -96,15 +103,6 @@ li {
     border-bottom: 1px solid var(--gray-border);
   }
 
-  .img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50px;
-    background-color: var(--gray-bg-1);
-
-    margin-right: 12px;
-  }
-
   .content {
     flex: 1;
     display: flex;
@@ -126,5 +124,14 @@ li {
     border-radius: 1rem;
     border-bottom: none;
   }
+}
+
+.img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  background-color: var(--gray-bg-1);
+
+  margin-right: 12px;
 }
 </style>
