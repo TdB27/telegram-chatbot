@@ -1,4 +1,5 @@
 <script setup>
+import Content from "./layout/Content.vue";
 import Header from "./layout/Header.vue";
 import Chat from "./pages/chat/Index.vue";
 </script>
@@ -6,6 +7,6 @@ import Chat from "./pages/chat/Index.vue";
 <template>
   <div class="container-xl">
     <Header />
-    <Chat />
+    <Content />
   </div>
 </template>

@@ -10,7 +10,10 @@
       <i class="fa fa-angle-down"></i>
     </div>
     <div class="user-dropdown-content">
-      <a href="#"><i class="fa fa-sign-out"></i> Sair</a>
+      <router-link to="/auth">
+        <i class="fa fa-sign-out"></i>
+        Sair
+      </router-link>
     </div>
   </div>
 </template>

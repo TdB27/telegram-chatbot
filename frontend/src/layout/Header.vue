@@ -6,16 +6,16 @@ import DropdownUser from "./DropdownUser.vue";
   <header>
     <ul class="d-flex">
       <li>
-        <a href="#">
+        <router-link to="/chat">
           <i class="bi bi-arrow-right"></i>
           Chat
-        </a>
+        </router-link>
       </li>
       <li>
-        <a href="#">
+        <router-link to="/register">
           <i class="bi bi-arrow-right"></i>
           Cadastro
-        </a>
+        </router-link>
       </li>
     </ul>
     <DropdownUser />
