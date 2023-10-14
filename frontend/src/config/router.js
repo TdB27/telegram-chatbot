@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Chat from "../pages/chat/Index.vue";
+import Register from "../pages/register/Index.vue";
 
 const routes = [
   {
@@ -11,7 +12,7 @@ const routes = [
   {
     name: "register",
     path: "/register",
-    component: Chat,
+    component: Register,
   },
   {
     name: "auth",
