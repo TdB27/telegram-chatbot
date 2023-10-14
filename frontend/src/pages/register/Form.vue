@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { Modal } from "bootstrap";
+import axios from "axios";
 
 let modal = ref({});
 const form = ref({});
@@ -15,6 +16,15 @@ onMounted(() => {
 
 function save() {
   console.log(form.value);
+
+  axios
+    .post("http://localhost:3000/users", form.value)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+    });
 }
 </script>
 
