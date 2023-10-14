@@ -9,4 +9,9 @@ import router from "./config/router";
 
 import "./assets/css/style.css";
 
+// import { defaultSuccess, defaultError } from "./config/msgs.js";
+
+// defaultSuccess({});
+// defaultError({});
+
 createApp(App).use(store).use(router).mount("#app");
