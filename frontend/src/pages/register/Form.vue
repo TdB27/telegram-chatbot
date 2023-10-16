@@ -1,12 +1,11 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineEmits } from "vue";
 import { Modal } from "bootstrap";
 import axios from "axios";
 
 let modal = ref({});
 const form = ref({});
-
-const count = ref(0);
+const emit = defineEmits(["get"]);
 
 defineExpose({ modal, form });
 
@@ -14,17 +13,19 @@ onMounted(() => {
   modal.value = new Modal(document.getElementById("modal-user"), {});
 });
 
-function save() {
+async function save() {
   console.log(form.value);
 
-  axios
+  await axios
     .post("http://localhost:3000/users", form.value)
-    .then((res) => {
-      console.log(res.data);
+    .then((_) => {
+      modal.value.hide();
     })
     .catch((err) => {
-      console.log(err.response.data);
+      console.log(err.response);
     });
+
+  emit("get");
 }
 </script>
 

@@ -1,10 +1,8 @@
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-export function defaultSuccess(payload) {
-  const message = !payload.msg
-    ? "Operação realizada com sucesso!"
-    : payload.msg;
+export function defaultSuccess(payload = null) {
+  const message = !payload ? "Operação realizada com sucesso!" : payload;
 
   toast.success(message, {
     theme: "colored",
@@ -12,8 +10,8 @@ export function defaultSuccess(payload) {
   });
 }
 
-export function defaultError(payload) {
-  const message = !payload.msg ? "Oops... Erro inesperado" : payload.msg;
+export function defaultError(payload = null) {
+  const message = !payload ? "Oops... Erro inesperado" : payload;
 
   toast.error(message, {
     theme: "colored",

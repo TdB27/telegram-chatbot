@@ -1,12 +1,41 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
 import Form from "./Form.vue";
+import { defaultSuccess, defaultError } from "../../config/msgs";
+
+onMounted(() => {
+  getUsers();
+});
 
 const Modal = ref(null);
 
 function openForm(usuario = {}) {
   Modal.value.form = { ...usuario };
   Modal.value.modal.show();
+}
+
+let users = ref([]);
+async function getUsers(event = null) {
+  console.log(event);
+
+  await axios
+    .get("http://localhost:3000/users")
+    .then((res) => {
+      console.log(res.data);
+      users.value = res.data;
+    })
+    .catch((err) => defaultError(err.response));
+}
+
+async function destroy(id) {
+  await axios
+    .delete(`http://localhost:3000/user/${id}`)
+    .then((res) => {
+      defaultSuccess(res.data);
+      getUsers();
+    })
+    .catch((err) => defaultError(err.response.data));
 }
 </script>
 
@@ -31,14 +60,16 @@ function openForm(usuario = {}) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Thiago</td>
-              <td>thiago@gmail.com</td>
+            <tr v-for="u in users" :key="u.id">
+              <td>{{ u.name }}</td>
+              <td>{{ u.email }}</td>
               <td class="d-flex flex-nowrap justify-content-center">
-                <button class="btn btn-sm btn-warning me-2">
+                <button
+                  @click="openForm(u)"
+                  class="btn btn-sm btn-warning me-2">
                   <i class="bi bi-pen"></i>
                 </button>
-                <button class="btn btn-sm btn-danger">
+                <button @click="destroy(u.id)" class="btn btn-sm btn-danger">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -48,6 +79,6 @@ function openForm(usuario = {}) {
       </div>
     </div>
 
-    <Form ref="Modal" />
+    <Form ref="Modal" @get="getUsers" />
   </div>
 </template>
