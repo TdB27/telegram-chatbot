@@ -10,8 +10,8 @@ module.exports = class UserService {
     this.model = new UserModel();
   }
 
-  async get() {
-    const data = await this.model.get();
+  async get({ auth_user_id }) {
+    const data = await this.model.get({ auth_user_id });
 
     if (data.error) return { status: 500 };
     return { status: 200, data };

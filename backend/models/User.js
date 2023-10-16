@@ -5,10 +5,11 @@ module.exports = class User {
     this.model = db("users");
   }
 
-  async get() {
+  async get({ auth_user_id }) {
     return await this.model
       .select(["id", "name", "email"])
       .whereNot({ email: "admin@admin.com" })
+      .whereNot({ id: auth_user_id })
       .orderBy("id")
       .then((users) => {
         return users;

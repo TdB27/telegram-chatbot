@@ -1,16 +1,22 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { defaultSuccess, defaultError } from "../../config/msgs";
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
 import axios from "axios";
 
 import Form from "./Form.vue";
 import Table from "./Table.vue";
+
+import { defaultSuccess, defaultError } from "../../config/msgs";
+import { baseApiUrl } from "../../global";
 
 onMounted(() => {
   get();
 });
 
 const Modal = ref(null);
+
+const storeV = useStore();
+const user = computed(() => storeV.state.user);
 
 function openForm(usuario = {}) {
   Modal.value.form = { ...usuario };
@@ -20,7 +26,7 @@ function openForm(usuario = {}) {
 let users = ref([]);
 async function get() {
   await axios
-    .get("http://localhost:3000/users")
+    .get(`${baseApiUrl}/users/${user.value.id}`)
     .then((res) => {
       users.value = res.data;
     })
@@ -31,7 +37,7 @@ async function store(event) {
   const { value } = event;
 
   await axios
-    .post("http://localhost:3000/users", value)
+    .post(`${baseApiUrl}/users`, value)
     .then((resp) => {
       defaultSuccess(resp.data);
       get();
@@ -42,7 +48,7 @@ async function store(event) {
 
 async function destroy(id) {
   await axios
-    .delete(`http://localhost:3000/user/${id}`)
+    .delete(`${baseApiUrl}/user/${id}`)
     .then((resp) => {
       defaultSuccess(resp.data);
       get();

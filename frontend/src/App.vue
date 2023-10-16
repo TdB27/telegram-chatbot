@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref, reactive } from "vue";
+import { watch, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -14,7 +14,7 @@ const router = useRouter();
 const isAuth = ref(false);
 
 const store = useStore();
-const userStore = reactive(store.state.user);
+const userStore = computed(() => store.state.user);
 
 watch(route, (value) => {
   let { path } = value;
@@ -28,7 +28,7 @@ watch(route, (value) => {
   } else {
     const json = JSON.parse(user);
 
-    if (!userStore.id) {
+    if (!userStore.value.id) {
       store.dispatch("setUser", { ...json });
     }
 

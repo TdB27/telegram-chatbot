@@ -3,7 +3,9 @@ const instanceUserService = require("../services/UserService");
 module.exports = (app) => {
   const get = async (req, res) => {
     const UserService = new instanceUserService();
-    const service = await UserService.get();
+    const service = await UserService.get({
+      auth_user_id: req.params.auth_user_id,
+    });
 
     return res.status(service.status).send(service.data ?? null);
   };
