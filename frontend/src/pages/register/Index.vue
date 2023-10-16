@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
-import Form from "./Form.vue";
 import { defaultSuccess, defaultError } from "../../config/msgs";
+import axios from "axios";
+
+import Form from "./Form.vue";
+import Table from "./Table.vue";
 
 onMounted(() => {
   get();
@@ -60,33 +62,7 @@ async function destroy(id) {
       </div>
     </div>
     <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Usuario</th>
-              <th>Email</th>
-              <th class="col-2 text-center">Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="u in users" :key="u.id">
-              <td>{{ u.name }}</td>
-              <td>{{ u.email }}</td>
-              <td class="d-flex flex-nowrap justify-content-center">
-                <button
-                  @click="openForm(u)"
-                  class="btn btn-sm btn-warning me-2">
-                  <i class="bi bi-pen"></i>
-                </button>
-                <button @click="destroy(u.id)" class="btn btn-sm btn-danger">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <Table :users="users" @openForm="openForm" @destroy="destroy" />
     </div>
 
     <Form ref="Modal" @store="store" />
