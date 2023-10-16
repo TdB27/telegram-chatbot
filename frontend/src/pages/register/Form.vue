@@ -5,7 +5,7 @@ import axios from "axios";
 
 let modal = ref({});
 const form = ref({});
-const emit = defineEmits(["get"]);
+const emit = defineEmits(["store"]);
 
 defineExpose({ modal, form });
 
@@ -13,20 +13,7 @@ onMounted(() => {
   modal.value = new Modal(document.getElementById("modal-user"), {});
 });
 
-async function save() {
-  console.log(form.value);
-
-  await axios
-    .post("http://localhost:3000/users", form.value)
-    .then((_) => {
-      modal.value.hide();
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  emit("get");
-}
+const store = () => emit("store", form);
 </script>
 
 <template>
@@ -63,7 +50,7 @@ async function save() {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" @click="save" class="btn btn-success">
+          <button type="button" @click="store" class="btn btn-success">
             Salvar
           </button>
         </div>

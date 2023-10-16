@@ -5,7 +5,7 @@ import Form from "./Form.vue";
 import { defaultSuccess, defaultError } from "../../config/msgs";
 
 onMounted(() => {
-  getUsers();
+  get();
 });
 
 const Modal = ref(null);
@@ -16,24 +16,34 @@ function openForm(usuario = {}) {
 }
 
 let users = ref([]);
-async function getUsers(event = null) {
-  console.log(event);
-
+async function get() {
   await axios
     .get("http://localhost:3000/users")
     .then((res) => {
-      console.log(res.data);
       users.value = res.data;
     })
     .catch((err) => defaultError(err.response));
 }
 
+async function store(event) {
+  const { value } = event;
+
+  await axios
+    .post("http://localhost:3000/users", value)
+    .then((resp) => {
+      defaultSuccess(resp.data);
+      get();
+      Modal.value.modal.hide();
+    })
+    .catch((err) => defaultError(err.response.data));
+}
+
 async function destroy(id) {
   await axios
     .delete(`http://localhost:3000/user/${id}`)
-    .then((res) => {
-      defaultSuccess(res.data);
-      getUsers();
+    .then((resp) => {
+      defaultSuccess(resp.data);
+      get();
     })
     .catch((err) => defaultError(err.response.data));
 }
@@ -79,6 +89,6 @@ async function destroy(id) {
       </div>
     </div>
 
-    <Form ref="Modal" @get="getUsers" />
+    <Form ref="Modal" @store="store" />
   </div>
 </template>
