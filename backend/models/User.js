@@ -8,6 +8,7 @@ module.exports = class User {
   async get() {
     return await this.model
       .select(["id", "name", "email"])
+      .whereNot({ email: "admin@admin.com" })
       .orderBy("id")
       .then((users) => {
         return users;
