@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Chat from "../pages/chat/Index.vue";
 import Register from "../pages/register/Index.vue";
+import Auth from "../pages/auth/Index.vue";
 
 const routes = [
   {
@@ -17,7 +18,7 @@ const routes = [
   {
     name: "auth",
     path: "/auth",
-    component: Chat,
+    component: Auth,
   },
 ];
 
