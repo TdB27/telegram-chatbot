@@ -1,7 +1,28 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import axios from "axios";
+
+import { baseApiUrl, userKey } from "../../global";
+import { defaultSuccess, defaultError } from "../../config/msgs";
+
+const store = useStore();
+const router = useRouter();
 
 const form = ref({});
+
+function signin() {
+  axios
+    .post(`${baseApiUrl}/signin`, form.value)
+    .then((resp) => {
+      store.dispatch("setUser", { ...resp.data });
+      localStorage.setItem(userKey, JSON.stringify(resp.data));
+
+      router.push({ path: "/chat" });
+    })
+    .catch((err) => defaultError(err.response.data));
+}
 </script>
 
 <template>
@@ -13,10 +34,10 @@ const form = ref({});
       </div>
       <div class="form-group mb-4">
         <label for="name">Senha</label>
-        <input type="text" v-model="form.password" class="form-control" />
+        <input type="password" v-model="form.password" class="form-control" />
       </div>
       <div class="d-flex justify-content-center">
-        <button type="button" @click="store" class="btn btn-primary">
+        <button type="button" @click="signin" class="btn btn-primary">
           Entrar
         </button>
       </div>

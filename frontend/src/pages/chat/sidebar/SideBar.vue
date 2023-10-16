@@ -1,18 +1,19 @@
 <script setup>
 import Filtro from "./Filtro.vue";
-import { reactive, ref } from "vue";
+import { computed, ref } from "vue";
 
 import { useStore } from "vuex";
 
 const store = useStore();
-const bot = reactive(store.state.bot);
+const bot = computed(() => store.state.bot);
+const user = computed(() => store.state.user);
 
-const users = bot.users.map((item) => {
+const usersBot = bot.value.users.map((item) => {
   item.time = item.messages[item.messages.length - 1].time;
   return item;
 });
 
-let listUsers = ref([...users]);
+let listUsers = ref([...usersBot]);
 
 function search(event) {
   listUsers.value = users.filter((item) => {
@@ -23,30 +24,41 @@ function search(event) {
   });
 }
 
-const selectUser = (user) => store.dispatch("selectUser", { ...user });
+const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
 </script>
 
 <template>
   <aside id="sidebar">
-    <div class="d-flex align-items-center p-3">
-      <div class="img"></div>
+    <div v-if="!user.key_bot" class="d-flex justify-content-center p-3">
       <div class="content">
-        <div class="name">{{ bot.name }}</div>
+        <div class="name">Esse usuário não tem BOT</div>
       </div>
     </div>
-
-    <Filtro @search="search" />
-
-    <ul v-if="listUsers.length">
-      <li class="p-3" v-for="u in listUsers" :key="u.id" @click="selectUser(u)">
+    <div v-else>
+      <div class="d-flex align-items-center p-3">
         <div class="img"></div>
         <div class="content">
-          <div class="name">{{ u.name }}</div>
-          <div class="time">{{ u.time }}</div>
+          <div class="name">{{ bot.name }}</div>
         </div>
-      </li>
-    </ul>
-    <p class="text-center" v-else>Não há registros nessa pesquisa</p>
+      </div>
+
+      <Filtro @search="search" />
+
+      <ul v-if="listUsers.length">
+        <li
+          class="p-3"
+          v-for="u in listUsers"
+          :key="u.id"
+          @click="selectUserBot(u)">
+          <div class="img"></div>
+          <div class="content">
+            <div class="name">{{ u.name }}</div>
+            <div class="time">{{ u.time }}</div>
+          </div>
+        </li>
+      </ul>
+      <p class="text-center" v-else>Não há registros nessa pesquisa</p>
+    </div>
   </aside>
 </template>
 

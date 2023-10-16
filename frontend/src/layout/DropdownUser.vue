@@ -1,19 +1,36 @@
-<script setup></script>
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+
+import { userKey } from "../global";
+
+const store = useStore();
+const router = useRouter();
+
+const user = computed(() => store.state.user);
+
+function logout() {
+  localStorage.removeItem(userKey);
+  store.dispatch("setUser", {});
+  router.push({ name: "auth" });
+}
+</script>
 
 <template>
   <div class="user-dropdown">
     <div class="user-button">
       <span class="d-none d-sm-block">
         <i class="bi bi-person-circle"></i>
-        Thiago
+        {{ user?.name }}
       </span>
       <i class="fa fa-angle-down"></i>
     </div>
     <div class="user-dropdown-content">
-      <router-link to="/auth">
+      <a href @click.prevent="logout">
         <i class="fa fa-sign-out"></i>
         Sair
-      </router-link>
+      </a>
     </div>
   </div>
 </template>
@@ -54,7 +71,7 @@
 
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
+    transition: visibility 0s, opacity 0.2s linear;
 
     a {
       text-decoration: none;

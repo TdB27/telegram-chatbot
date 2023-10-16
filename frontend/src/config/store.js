@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
+    user: {},
     botUser: {},
     bot: {
       name: "Bot do Thiago",
@@ -69,14 +70,20 @@ export default createStore({
   },
 
   mutations: {
-    selectUser(state, payload) {
+    selectUserBot(state, payload) {
       state.botUser = { ...payload };
+    },
+    setUser(state, payload) {
+      state.user = { ...payload };
     },
   },
 
   actions: {
-    selectUser({ commit }, payload) {
-      commit("selectUser", { ...payload });
+    selectUserBot({ commit }, payload) {
+      commit("selectUserBot", { ...payload });
+    },
+    setUser({ commit }, payload) {
+      commit("setUser", { ...payload });
     },
   },
 });
