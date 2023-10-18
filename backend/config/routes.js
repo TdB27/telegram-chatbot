@@ -5,4 +5,8 @@ module.exports = (app) => {
   app.route("/user/:id").delete(app.controllers.UserController.destroy);
 
   app.route("/signin").post(app.controllers.AuthController.signin);
+
+  app
+    .route("/api/telegram/:key_bot")
+    .get(app.controllers.api.TelegramController.get);
 };

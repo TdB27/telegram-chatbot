@@ -1,6 +1,26 @@
 <script setup>
 import Sidebar from "./sidebar/SideBar.vue";
 import Content from "./content/Content.vue";
+
+import { useStore } from "vuex";
+import { baseApiUrl } from "../../global";
+import { defaultSuccess, defaultError } from "../../config/msgs";
+import axios from "axios";
+
+const store = useStore();
+
+function getChat() {
+  axios
+    .get(`${baseApiUrl}/api/telegram/${store.state.user.key_bot}`)
+    .then((resp) => {
+      store.dispatch("setUserBotFromApi", { ...resp.data });
+    })
+    .catch((err) => {
+      defaultError(err.response.data);
+    });
+}
+
+getChat();
 </script>
 
 <template>

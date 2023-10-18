@@ -8,7 +8,7 @@ const botUser = computed(() => store.state.botUser);
 
 <template>
   <section id="content">
-    <header id="header" class="p-3" v-if="botUser.id">
+    <header id="header" class="p-3" v-if="botUser.chat_id">
       <div class="img"></div>
       <div class="name">{{ botUser.name }}</div>
     </header>
@@ -24,7 +24,7 @@ const botUser = computed(() => store.state.botUser);
         <span class="time"> {{ m.time }}</span>
       </p>
     </section>
-    <section id="send-message" v-if="botUser.id">
+    <section id="send-message" v-if="botUser.chat_id">
       <input
         type="text"
         class="form-control"

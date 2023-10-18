@@ -1,22 +1,29 @@
 <script setup>
 import Filtro from "./Filtro.vue";
-import { computed, ref } from "vue";
 
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
 const bot = computed(() => store.state.bot);
 const user = computed(() => store.state.user);
 
-const usersBot = bot.value.users.map((item) => {
-  item.time = item.messages[item.messages.length - 1].time;
-  return item;
+let usersBot = [];
+let listUsers;
+
+watch(bot, (value) => {
+  if (value.chat_id) {
+    usersBot = value.users.map((item) => {
+      item.time = item.messages[item.messages.length - 1].time;
+      return item;
+    });
+
+    listUsers = ref([...usersBot]);
+  }
 });
 
-let listUsers = ref([...usersBot]);
-
 function search(event) {
-  listUsers.value = users.filter((item) => {
+  listUsers.value = usersBot.filter((item) => {
     let name = item.name.toLowerCase();
     let eventName = event.toLowerCase();
 
@@ -29,7 +36,9 @@ const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
 
 <template>
   <aside id="sidebar">
-    <div v-if="!user.key_bot" class="d-flex justify-content-center p-3">
+    <div
+      v-if="!user.key_bot || !bot.chat_id"
+      class="d-flex justify-content-center p-3">
       <div class="content">
         <div class="name">Esse usuário não tem BOT</div>
       </div>
@@ -38,7 +47,7 @@ const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
       <div class="d-flex align-items-center p-3">
         <div class="img"></div>
         <div class="content">
-          <div class="name">{{ bot.name }}</div>
+          <div class="name">{{ bot.username }}</div>
         </div>
       </div>
 
@@ -48,7 +57,7 @@ const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
         <li
           class="p-3"
           v-for="u in listUsers"
-          :key="u.id"
+          :key="u.chat_id"
           @click="selectUserBot(u)">
           <div class="img"></div>
           <div class="content">
@@ -65,8 +74,8 @@ const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
 <style lang="scss" scoped>
 #sidebar {
   border-right: 1px solid var(--gray-border);
-  max-height: calc(100vh - 24px);
-  min-height: calc(100vh - 24px);
+  max-height: calc(100vh - 72px);
+  min-height: calc(100vh - 72px);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
