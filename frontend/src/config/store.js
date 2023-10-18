@@ -5,7 +5,7 @@ export default createStore({
     user: {},
     botUser: {},
     bot: {},
-    // modelo de  messagens dentro de users do bot
+    // modelo de  mensagens dentro de users do bot
     // messages: [
     //   {
     //     type: "user",
@@ -18,6 +18,7 @@ export default createStore({
     //     time: "12:09",
     //   },
     // ],
+    socket: {},
   },
 
   mutations: {
@@ -32,6 +33,21 @@ export default createStore({
     setUserBotFromApi(state, payload) {
       state.bot = { ...payload };
     },
+
+    setSocketIo(state, payload) {
+      state.socket = { ...payload };
+    },
+
+    updateMessageUser(state, payload) {
+      const index = state.bot.users.findIndex(
+        (item) => item.chat_id === payload.chatId
+      );
+
+      state.bot.users[index].messages.push({
+        text: payload.msg,
+        type: "bot",
+      });
+    },
   },
 
   actions: {
@@ -45,6 +61,14 @@ export default createStore({
 
     setUserBotFromApi({ commit }, payload) {
       commit("setUserBotFromApi", { ...payload });
+    },
+
+    setSocketIo({ commit }, payload) {
+      commit("setSocketIo", { ...payload });
+    },
+
+    updateMessageUser({ commit }, payload) {
+      commit("updateMessageUser", { ...payload });
     },
   },
 });

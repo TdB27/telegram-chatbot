@@ -21,6 +21,17 @@ function getChat() {
 }
 
 getChat();
+
+const ioClient = io.connect(baseApiUrl, { withCredentials: false });
+
+ioClient.on("connect", (msg) => {
+  console.log("connected!", ioClient.id);
+  store.dispatch("setSocketIo", { socketId: ioClient.id });
+});
+
+ioClient.on("updateChat", (value) => {
+  store.dispatch("updateMessageUser", value);
+});
 </script>
 
 <template>

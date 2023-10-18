@@ -9,4 +9,8 @@ module.exports = (app) => {
   app
     .route("/api/telegram/:key_bot")
     .get(app.controllers.api.TelegramController.get);
+
+  app
+    .route("/api/telegram/:key_bot/sendMessage")
+    .post(app.controllers.api.TelegramController.sendMessage);
 };

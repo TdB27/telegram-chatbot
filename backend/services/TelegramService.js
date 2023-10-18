@@ -62,7 +62,7 @@ module.exports = class TelegramService {
 
   #getDataFormatted({ me, updates }) {
     return {
-      chat_id: me.id,
+      id: me.id,
       username: me.username,
       first_name: me.first_name,
       users: this.#formatUpdates(updates),

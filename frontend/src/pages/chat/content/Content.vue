@@ -1,9 +1,36 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
+
+import axios from "axios";
+import { baseApiUrl } from "../../../global";
+import { defaultSuccess, defaultError } from "../../../config/msgs";
 
 const store = useStore();
 const botUser = computed(() => store.state.botUser);
+
+const msg = ref("");
+
+function sendMessage() {
+  if (msg.value) {
+    const keyBot = store.state.user.key_bot;
+    const chatId = botUser.value.chat_id;
+    const { socketId } = store.state.socket;
+
+    axios
+      .post(`${baseApiUrl}/api/telegram/${keyBot}/sendMessage`, {
+        chatId,
+        msg: msg.value,
+        socketId,
+      })
+      .then((resp) => {
+        msg.value = "";
+      })
+      .catch((err) => {
+        defaultError(err.response.data);
+      });
+  }
+}
 </script>
 
 <template>
@@ -27,10 +54,12 @@ const botUser = computed(() => store.state.botUser);
     <section id="send-message" v-if="botUser.chat_id">
       <input
         type="text"
+        v-model="msg"
+        @keyup.enter="sendMessage"
         class="form-control"
         placeholder="Escreva sua mensagem aqui" />
 
-      <button class="btn-send">
+      <button class="btn-send" @click="sendMessage">
         <i class="bi bi-send"></i>
       </button>
     </section>
@@ -40,7 +69,7 @@ const botUser = computed(() => store.state.botUser);
 <style lang="scss" scoped>
 #content {
   overflow: hidden;
-  max-height: calc(100vh - 24px);
+  max-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
 }

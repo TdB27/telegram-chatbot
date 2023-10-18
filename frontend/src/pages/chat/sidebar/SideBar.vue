@@ -9,10 +9,10 @@ const bot = computed(() => store.state.bot);
 const user = computed(() => store.state.user);
 
 let usersBot = [];
-let listUsers;
+let listUsers = ref([]);
 
 watch(bot, (value) => {
-  if (value.chat_id) {
+  if (value.id) {
     usersBot = value.users.map((item) => {
       item.time = item.messages[item.messages.length - 1].time;
       return item;
@@ -37,7 +37,7 @@ const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
 <template>
   <aside id="sidebar">
     <div
-      v-if="!user.key_bot || !bot.chat_id"
+      v-if="!user.key_bot || !bot.id"
       class="d-flex justify-content-center p-3">
       <div class="content">
         <div class="name">Esse usuário não tem BOT</div>
