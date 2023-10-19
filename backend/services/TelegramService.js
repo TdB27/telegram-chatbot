@@ -1,105 +1,93 @@
-const axios = require("axios");
+const LogModel = require("../models/Logs");
+const InstanceTelegram = require("../integrations/Telegram");
 
 module.exports = class TelegramService {
   #keyBot;
-  #urlDefault = "https://api.telegram.org";
+  #model;
+  #apiTelegram;
 
   constructor(keyBot) {
+    this.#model = new LogModel();
     this.#keyBot = keyBot;
+    this.#apiTelegram = new InstanceTelegram(keyBot);
   }
 
   async get() {
-    const me = await this.#getMe();
-    if (me.error) return { status: me.status, data: me.data };
+    try {
+      let data = await this.#apiTelegram.getDataTelegram();
 
-    const updates = await this.#getUpdates();
-    if (updates.error) return { status: updates.status, data: updates.data };
+      const dataToStore = this.#formatDataToStore(data);
+      await this.#store({ dataToStore, bot_id: data.id });
 
-    const data = this.#getDataFormatted({
-      me: me.data.result,
-      updates: updates.data.result,
+      const logs = await this.#model.getByBotId({ bot_id: data.id });
+
+      data.users = this.#formatDataToView(logs);
+
+      return { status: 200, data };
+    } catch (error) {
+      console.log(error);
+      return { status: 404, data: error };
+    }
+  }
+
+  #formatDataToStore(data) {
+    let dataToStore = [];
+
+    data.users.forEach((user) => {
+      user.messages.forEach((message) => {
+        dataToStore.push({
+          bot_id: data.id,
+          chat_id: user.chat_id,
+          message_id: message.message_id,
+          name: user.name,
+          text: message.text,
+          type: message.type,
+          created_at: message.time,
+        });
+      });
     });
 
-    return { status: 200, data };
+    return dataToStore;
   }
 
-  async #getMe() {
-    return await axios
-      .get(`${this.#urlDefault}/bot${this.#keyBot}/getMe`)
-      .then((resp) => {
-        return {
-          status: 200,
-          data: resp.data,
-        };
-      })
-      .catch((err) => {
-        return {
-          error: true,
-          status: 404,
-          data: "Este usuário não tem Bot e/ou a chave do Bot está incorreto",
-          //   data: err.response.data,
-        };
-      });
-  }
-
-  async #getUpdates() {
-    return await axios
-      .get(`${this.#urlDefault}/bot${this.#keyBot}/getUpdates`)
-      .then((resp) => {
-        return {
-          status: 200,
-          data: resp.data,
-        };
-      })
-      .catch((err) => {
-        return {
-          error: true,
-          status: 404,
-          data: "Erro ao buscar as mensagens desse Bot",
-        };
-      });
-  }
-
-  #getDataFormatted({ me, updates }) {
-    return {
-      id: me.id,
-      username: me.username,
-      first_name: me.first_name,
-      users: this.#formatUpdates(updates),
-    };
-  }
-
-  #formatUpdates(updatesBot) {
-    const chatIds = updatesBot.map((item) => item.message.chat.id);
-    const chatIdsFilters = chatIds.filter(
-      (item, index) => chatIds.indexOf(item) === index
+  #formatDataToView(logs) {
+    const chatsId = logs.map((item) => item.chat_id);
+    const chatsIdFiltered = chatsId.filter(
+      (item, index) => chatsId.indexOf(item) === index
     );
 
-    return chatIdsFilters.map((item) => {
-      let filter = updatesBot.filter(
-        (itemBot) => itemBot.message.chat.id === item
-      );
+    return chatsIdFiltered.map((item) => {
+      const dataLogs = logs.filter((log) => item === log.chat_id);
 
-      let messages = filter.map((messageFilter) => {
+      const messages = dataLogs.map((item) => {
+        let date = new Date(item.created_at);
         return {
-          type: "user",
-          text: messageFilter.message.text,
-          time: this.#formatDate(messageFilter.message.date),
+          text: item.text,
+          type: item.type,
+          time: `${date.getDate()}/${
+            date.getMonth() + 1
+          }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`,
         };
       });
 
       return {
-        chat_id: item,
-        name: `${filter[0].message.chat.first_name} ${filter[0].message.chat.last_name}`,
+        chat_id: dataLogs[0].chat_id,
+        name: dataLogs[0].name,
         messages,
       };
     });
   }
 
-  #formatDate(value) {
-    const date = new Date(value * 1000);
-    return `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  async #store({ dataToStore, bot_id }) {
+    await dataToStore.forEach(async (item) => {
+      let model = new LogModel();
+
+      let hasMessage = await model.getByMessageId({
+        chat_id: item.chat_id,
+        message_id: item.message_id,
+      });
+
+      if (!hasMessage) await model.store(item);
+    });
   }
 };

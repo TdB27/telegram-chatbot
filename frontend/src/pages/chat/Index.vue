@@ -20,7 +20,7 @@ function getChat() {
     });
 }
 
-getChat();
+setInterval(() => getChat(), 5000);
 
 const ioClient = io.connect(baseApiUrl, { withCredentials: false });
 
