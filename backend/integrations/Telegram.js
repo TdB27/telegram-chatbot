@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { formatDateToLocaleUsa } = require("../generals/date");
 
 module.exports = class Telegram {
   #keyBot;
@@ -83,7 +84,7 @@ module.exports = class Telegram {
           type: "user",
           message_id: messageFilter.message.message_id,
           text: messageFilter.message.text,
-          time: this.#formatDate(messageFilter.message.date),
+          time: formatDateToLocaleUsa(messageFilter.message.date * 1000),
         };
       });
 
@@ -93,12 +94,5 @@ module.exports = class Telegram {
         messages,
       };
     });
-  }
-
-  #formatDate(value) {
-    const date = new Date(value * 1000);
-    return `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   }
 };

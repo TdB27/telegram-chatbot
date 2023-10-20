@@ -81,19 +81,10 @@ module.exports = class TelegramService {
       const dataLogs = logs.filter((log) => item === log.chat_id);
 
       const messages = dataLogs.map((item) => {
-        let date = new Date(item.created_at);
-
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const hour = date.getHours();
-        const minutes =
-          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-
         return {
           text: item.text,
           type: item.type,
-          time: `${day}/${month}/${year} ${hour}:${minutes}`,
+          time: formatDateToLocaleBr(item.created_at),
         };
       });
 
