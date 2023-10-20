@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.bigInteger("chat_id");
     table.integer("message_id");
     table.string("name");
-    table.string("text");
+    table.text("text");
     table.string("type");
     table.timestamp("created_at");
   });

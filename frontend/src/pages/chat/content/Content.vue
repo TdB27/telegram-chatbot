@@ -99,6 +99,8 @@ function sendMessage() {
   width: 100%;
   padding: 1rem;
 
+  scroll-behavior: smooth;
+
   overflow-y: scroll;
 
   display: flex;

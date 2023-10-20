@@ -17,12 +17,15 @@ module.exports = class User {
   }
 
   async getByBotId({ bot_id }) {
-    return await this.model.where({ bot_id }).then((logs) => {
-      return logs;
-    });
+    return await this.model
+      .where({ bot_id })
+      .orderBy("message_id")
+      .then((logs) => {
+        return logs;
+      });
   }
 
   async store(log) {
-    return await this.model.insert(log);
+    await this.model.insert(log);
   }
 };

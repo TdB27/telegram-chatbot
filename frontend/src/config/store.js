@@ -3,8 +3,9 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     user: {},
-    botUser: {},
     bot: {},
+    botUser: {},
+    botUsers: [],
     // modelo de  mensagens dentro de users do bot
     // messages: [
     //   {
@@ -30,8 +31,11 @@ export default createStore({
       state.user = { ...payload };
     },
 
-    setUserBotFromApi(state, payload) {
-      state.bot = { ...payload };
+    setBotUserFromApi(state, payload) {
+      const { users, ...rest } = payload;
+
+      state.bot = { ...rest };
+      state.botUsers = [...users];
     },
 
     setSocketIo(state, payload) {
@@ -39,13 +43,22 @@ export default createStore({
     },
 
     updateMessageUser(state, payload) {
-      const index = state.bot.users.findIndex(
-        (item) => item.chat_id === payload.chatId
-      );
+      payload.map((p) => {
+        const index = state.botUsers.findIndex(
+          (item) => item.chat_id == p.chat_id
+        );
 
-      state.bot.users[index].messages.push({
-        text: payload.msg,
-        type: "bot",
+        if (index == -1) {
+          state.botUsers.push(p);
+        } else {
+          p.messages.forEach((m) => {
+            state.botUsers[index].messages.push({
+              text: m.text,
+              type: m.type,
+              time: m.time,
+            });
+          });
+        }
       });
     },
   },
@@ -59,8 +72,8 @@ export default createStore({
       commit("setUser", { ...payload });
     },
 
-    setUserBotFromApi({ commit }, payload) {
-      commit("setUserBotFromApi", { ...payload });
+    setBotUserFromApi({ commit }, payload) {
+      commit("setBotUserFromApi", { ...payload });
     },
 
     setSocketIo({ commit }, payload) {
@@ -68,7 +81,7 @@ export default createStore({
     },
 
     updateMessageUser({ commit }, payload) {
-      commit("updateMessageUser", { ...payload });
+      commit("updateMessageUser", [...payload]);
     },
   },
 });

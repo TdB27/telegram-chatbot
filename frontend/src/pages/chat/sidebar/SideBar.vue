@@ -5,25 +5,32 @@ import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
-const bot = computed(() => store.state.bot);
 const user = computed(() => store.state.user);
+const bot = computed(() => store.state.bot);
+const botUsers = computed(() => store.state.botUsers);
 
-let usersBot = [];
+let botUsersArr = [];
 let listUsers = ref([]);
 
-watch(bot, (value) => {
-  if (value.id) {
-    usersBot = value.users.map((item) => {
-      item.time = item.messages[item.messages.length - 1].time;
-      return item;
-    });
+watch(
+  botUsers,
+  (value) => {
+    if (value.length) {
+      botUsersArr = value.map((item) => {
+        item.time = item.messages[item.messages.length - 1].time;
+        return item;
+      });
 
-    listUsers = ref([...usersBot]);
-  }
-});
+      listUsers.value = [...botUsersArr];
+
+      scrollContentScreen();
+    }
+  },
+  { deep: true }
+);
 
 function search(event) {
-  listUsers.value = usersBot.filter((item) => {
+  listUsers.value = botUsersArr.filter((item) => {
     let name = item.name.toLowerCase();
     let eventName = event.toLowerCase();
 
@@ -31,7 +38,18 @@ function search(event) {
   });
 }
 
-const selectUserBot = (user) => store.dispatch("selectUserBot", { ...user });
+const scrollContentScreen = () => {
+  setTimeout(() => {
+    const content = document.getElementById("main");
+    const heightContent = content.scrollHeight;
+    content.scrollTo(0, heightContent);
+  }, 500);
+};
+
+const selectUserBot = (user) => {
+  store.dispatch("selectUserBot", { ...user });
+  scrollContentScreen();
+};
 </script>
 
 <template>

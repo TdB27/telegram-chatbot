@@ -1,5 +1,5 @@
-const InstanceTelegramService = require("../../services/TelegramService");
-const InstanceTelegrafService = require("../../services/TelegrafService");
+const InstanceTelegramService = require("../services/TelegramService");
+const InstanceTelegrafService = require("../services/TelegrafService");
 
 module.exports = (app, io) => {
   const get = async (req, res) => {
@@ -7,6 +7,15 @@ module.exports = (app, io) => {
 
     const TelegramService = new InstanceTelegramService(keyBot);
     const service = await TelegramService.get();
+
+    return res.status(service.status).send(service.data ?? null);
+  };
+
+  const getNewLogs = async (req, res) => {
+    const keyBot = req.params.key_bot;
+
+    const TelegramService = new InstanceTelegramService(keyBot);
+    const service = await TelegramService.getNewLogs();
 
     return res.status(service.status).send(service.data ?? null);
   };
@@ -24,5 +33,5 @@ module.exports = (app, io) => {
     return res.status(204).send();
   };
 
-  return { get, sendMessage };
+  return { get, getNewLogs, sendMessage };
 };

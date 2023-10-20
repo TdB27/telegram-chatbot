@@ -13,14 +13,29 @@ function getChat() {
   axios
     .get(`${baseApiUrl}/api/telegram/${store.state.user.key_bot}`)
     .then((resp) => {
-      store.dispatch("setUserBotFromApi", { ...resp.data });
+      store.dispatch("setBotUserFromApi", { ...resp.data });
     })
     .catch((err) => {
       defaultError(err.response.data);
     });
 }
 
-setInterval(() => getChat(), 5000);
+function getNewMessages() {
+  axios
+    .get(
+      `${baseApiUrl}/api/telegram/get-new-messages/${store.state.user.key_bot}`
+    )
+    .then((resp) => {
+      if (resp.data.length) store.dispatch("updateMessageUser", resp.data);
+    })
+    .catch((err) => {
+      defaultError(err.response.data);
+    });
+}
+
+getChat();
+setInterval(() => getNewMessages(), 2000);
+// setTimeout(() => getNewMessages(), 2000);
 
 const ioClient = io.connect(baseApiUrl, { withCredentials: false });
 
