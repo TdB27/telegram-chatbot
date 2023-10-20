@@ -7,8 +7,8 @@ exports.up = function (knex) {
     table.increments("id").primary();
     table.bigInteger("bot_id");
     table.bigInteger("chat_id");
-    table.integer("message_id");
-    table.string("name");
+    table.integer("message_id").nullable();
+    table.string("name").nullable();
     table.text("text");
     table.string("type");
     table.timestamp("created_at");

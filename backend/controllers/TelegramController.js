@@ -1,5 +1,4 @@
 const InstanceTelegramService = require("../services/TelegramService");
-const InstanceTelegrafService = require("../services/TelegrafService");
 
 module.exports = (app, io) => {
   const get = async (req, res) => {
@@ -21,16 +20,15 @@ module.exports = (app, io) => {
   };
 
   const sendMessage = async (req, res) => {
-    const { chatId, msg, socketId } = req.body;
+    const { socketId, ...rest } = req.body;
     const { key_bot: keyBot } = req.params;
 
-    const TelegrafService = new InstanceTelegrafService(keyBot);
+    const TelegramService = new InstanceTelegramService(keyBot);
+    const service = await TelegramService.sendMessage({ ...rest });
 
-    TelegrafService.sendMessage({ chatId, msg });
+    if (service.logs) io.to(socketId).emit("updateChat", service.logs);
 
-    io.to(socketId).emit("updateChat", { chatId, msg });
-
-    return res.status(204).send();
+    return res.status(service.status).send(service.data ?? null);
   };
 
   return { get, getNewLogs, sendMessage };

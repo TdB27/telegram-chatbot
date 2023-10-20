@@ -7,6 +7,7 @@ import { baseApiUrl } from "../../../global";
 import { defaultSuccess, defaultError } from "../../../config/msgs";
 
 const store = useStore();
+const bot = computed(() => store.state.bot);
 const botUser = computed(() => store.state.botUser);
 
 const msg = ref("");
@@ -14,11 +15,13 @@ const msg = ref("");
 function sendMessage() {
   if (msg.value) {
     const keyBot = store.state.user.key_bot;
+    const botId = bot.value.id;
     const chatId = botUser.value.chat_id;
     const { socketId } = store.state.socket;
 
     axios
-      .post(`${baseApiUrl}/api/telegram/${keyBot}/sendMessage`, {
+      .post(`${baseApiUrl}/api/telegram/${keyBot}/send-message`, {
+        botId,
         chatId,
         msg: msg.value,
         socketId,

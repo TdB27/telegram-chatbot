@@ -19,7 +19,7 @@ module.exports = class User {
   async getByBotId({ bot_id }) {
     return await this.model
       .where({ bot_id })
-      .orderBy("message_id")
+      .orderBy("created_at")
       .then((logs) => {
         return logs;
       });

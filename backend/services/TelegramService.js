@@ -1,5 +1,11 @@
 const LogModel = require("../models/Logs");
 const InstanceTelegram = require("../integrations/Telegram");
+const InstanceTelegraf = require("../integrations/Telegraf");
+
+const {
+  formatDateToLocaleBr,
+  formatDateToLocaleUsa,
+} = require("../generals/date");
 
 module.exports = class TelegramService {
   #keyBot;
@@ -105,6 +111,8 @@ module.exports = class TelegramService {
     for (const item of dataToStore) {
       let model = new LogModel();
 
+      if (!item.message_id) throw "Erro ao buscar os dados da Api";
+
       let hasMessage = await model.getByMessageId({
         chat_id: item.chat_id,
         message_id: item.message_id,
@@ -117,5 +125,42 @@ module.exports = class TelegramService {
     }
 
     return logs;
+  }
+
+  async sendMessage({ botId, chatId, msg }) {
+    try {
+      if (!botId) throw "Bot não reconhecido";
+
+      let model = new LogModel();
+      const date = new Date();
+
+      const Telegraf = new InstanceTelegraf(this.#keyBot);
+      Telegraf.sendMessage({ chatId, msg });
+
+      await model.store({
+        bot_id: botId,
+        chat_id: chatId,
+        text: msg,
+        type: "bot",
+        created_at: formatDateToLocaleUsa(date),
+      });
+
+      const logs = [
+        {
+          chat_id: chatId,
+          messages: [
+            {
+              text: msg,
+              type: "bot",
+              time: formatDateToLocaleBr(date),
+            },
+          ],
+        },
+      ];
+
+      return { status: 204, logs };
+    } catch (error) {
+      return { status: 404, data: error };
+    }
   }
 };
