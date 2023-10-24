@@ -2,6 +2,7 @@
 import Sidebar from "./sidebar/SideBar.vue";
 import Content from "./content/Content.vue";
 
+import { onUnmounted } from "vue";
 import { useStore } from "vuex";
 import { baseApiUrl } from "../../global";
 import { defaultSuccess, defaultError } from "../../config/msgs";
@@ -34,8 +35,12 @@ function getNewMessages() {
 }
 
 getChat();
-setInterval(() => getNewMessages(), 2000);
-// setTimeout(() => getNewMessages(), 2000);
+
+const setInterv = setInterval(() => getNewMessages(), 2000);
+
+onUnmounted(() => {
+  clearInterval(setInterv);
+});
 
 const ioClient = io.connect(baseApiUrl, { withCredentials: false });
 

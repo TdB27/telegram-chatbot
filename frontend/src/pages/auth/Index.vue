@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
@@ -23,11 +23,23 @@ function signin() {
     })
     .catch((err) => defaultError(err.response.data));
 }
+
+onMounted(() => {
+  document.querySelector("body").style.background =
+    "url('./assets/img/bg-chat.png')";
+});
+
+onUnmounted(() => {
+  document.querySelector("body").removeAttribute("style");
+});
 </script>
 
 <template>
   <div id="auth">
     <div class="auth-card">
+      <div class="img">
+        <img src="../../assets/img/chatbot_logo.png" alt="chatbot_logo" />
+      </div>
       <div class="form-group mb-4">
         <label for="name">Email</label>
         <input type="text" v-model="form.email" class="form-control" />
@@ -48,19 +60,46 @@ function signin() {
 <style lang="scss" scoped>
 #auth {
   max-width: 500px;
-  margin: 5rem auto 0;
-  background: url("./assets/img/bg-chat.png");
-  border-radius: 8px;
+  margin: 5rem auto;
 
-  opacity: 0.7;
+  background: linear-gradient(
+    180deg,
+    #fff 0%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.7) 90%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(9.5px);
+  -webkit-backdrop-filter: blur(9.5px);
+
+  border: 2px solid #fff;
+  border-radius: 10px;
+
+  opacity: 0.9;
   transition: opacity 0.3s;
+
+  .img {
+    margin: 0 auto 1rem;
+    width: 250px;
+
+    img {
+      width: 100%;
+    }
+  }
 
   .auth-card {
     padding: 1.5rem;
   }
 
   label {
-    color: #fff;
+    color: #000;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    border: 0.5px solid #000;
   }
 
   &:hover {
