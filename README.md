@@ -19,14 +19,14 @@ Projeto que permite aos usuários interagirem com chats ou grupos do Telegram at
 - npm install
 - knex migrate:latest
 - npm start
-- Para acessar as tecnologias usadas no Back-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/edit/main/backend/README.md)
+- Para acessar as tecnologias usadas no Back-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/blob/main/backend/README.md)
 
 ### Front-end
 
 - cd frontend/
 - npm install
 - npm run dev
-- Para acessar as tecnologias usadas no Front-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/edit/main/frontend/README.md)
+- Para acessar as tecnologias usadas no Front-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/blob/main/frontend/README.md)
 
 ## Futuras Features
 
