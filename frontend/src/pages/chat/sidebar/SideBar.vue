@@ -12,6 +12,7 @@ const botUsers = computed(() => store.state.botUsers);
 let botUsersArr = [];
 let listUsers = ref([]);
 
+// autalizar as conversas do bot conforme o estado do botUsers for alterado
 watch(
   botUsers,
   (value) => {

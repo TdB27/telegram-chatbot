@@ -8,9 +8,7 @@ module.exports = class TelegrafService {
   }
 
   sendMessage({ chatId, msg }) {
+    // Enviando a mensagem como text para o usuario
     this.#bot.telegram.sendMessage(chatId, msg);
-    // this.#bot.start((ctx) => ctx.reply("Welcome"));
-    // this.#bot.hears("hi", (ctx) => ctx.reply("Hey there"));
-    // this.#bot.launch();
   }
 };

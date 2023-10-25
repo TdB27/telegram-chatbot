@@ -25,6 +25,7 @@ Projeto que permite aos usuários interagirem com chats ou grupos do Telegram at
 - cd backend/
 - npm install
 - knex migrate:latest
+- knex seed:run
 - npm start
 - Para acessar as tecnologias usadas no Back-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/blob/main/backend/README.md)
 
@@ -33,9 +34,11 @@ Projeto que permite aos usuários interagirem com chats ou grupos do Telegram at
 - cd frontend/
 - npm install
 - npm run dev
+- Na tela de login o usuário padrão é: admin@admin.com e a senha: 1234
 - Para acessar as tecnologias usadas no Front-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/blob/main/frontend/README.md)
 
 ## Futuras Features
 
 - [ ] - Permitir que o comportamento adequado de imagens (tais como fotos, gifs, stickers, emojis enviadas pelo usuário) possam ser interpretadas corretamente pelo App
 - [ ] - Permitir que o sistema responda com imagens tais como descrita acima
+- [ ] - Enviar mensagens personalizadas e automatizadas para bot

@@ -5,6 +5,7 @@ const consign = require("consign");
 const db = require("./config/db");
 const PORT = 3000;
 
+// inicializar o socket io sentro do server
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {

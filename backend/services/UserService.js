@@ -11,6 +11,7 @@ module.exports = class UserService {
   }
 
   async get({ auth_user_id }) {
+    // buscar todos os usuarios, menos o usuario autenticado no sistema e o usuario padrão
     const data = await this.model.get({ auth_user_id });
 
     if (data.error) return { status: 500 };
@@ -18,6 +19,7 @@ module.exports = class UserService {
   }
 
   #encryptPassword(password) {
+    // função para criptografar a senha
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
   }
@@ -28,6 +30,7 @@ module.exports = class UserService {
     if (params.id) user.id = params.id;
 
     try {
+      // validações para salvar ou atualizar o usuário
       existsOrError(user.name, "Nome não informado");
       existsOrError(user.email, "Email não informado");
 

@@ -10,12 +10,17 @@ module.exports = class Telegram {
   }
 
   async getDataTelegram() {
+    // Busca o bot segundo o token (keyBot) inserido na instancia
     const me = await this.#getMe();
     if (me.error) throw me.data;
 
+    // A API do Telegram não envia toda a mensagens de todos os usuários que interagem com o bot,
+    // apenas as ultimas enviadas no período de +- 24 horas
+    // Busca as ultimas mensagens segundo o token (keyBot) inserido na instancia
     const updates = await this.#getUpdates();
     if (updates.error) throw updates.data;
 
+    // Retorna os dados formatados
     return this.#getDataFormatted({
       me: me.data.result,
       updates: updates.data.result,
@@ -69,16 +74,35 @@ module.exports = class Telegram {
   }
 
   #formatUpdates(updatesBot) {
+    // Formata as mensagens de acordo com cada usuario
+    // Modelo de como precisa estar formatado
+    // {
+    //   chat_id: 123,
+    //   name: 'Usuario 1',
+    //   messages: [
+    //     {
+    //       type: "user",
+    //       message_id: 1,
+    //       text: 'Teste',
+    //       time: '2023-10-25 11:40',
+    //     }
+    //   ],
+    // }
+
+    // pega somente o id dos chats
     const chatIds = updatesBot.map((item) => item.message.chat.id);
+    // filtra os chat_ids para ter somente os is diferentes
     const chatIdsFilters = chatIds.filter(
       (item, index) => chatIds.indexOf(item) === index
     );
 
+    // percorre os ids dos chats filtrados
     return chatIdsFilters.map((item) => {
       let filter = updatesBot.filter(
         (itemBot) => itemBot.message.chat.id === item
       );
 
+      // retorna um array com as mensagens formatadas de acordo com o id chat
       let messages = filter.map((messageFilter) => {
         return {
           type: "user",

@@ -12,6 +12,7 @@ const store = useStore();
 
 const hasChat = ref(false);
 
+// Buscar todas as mensagens salvas no DB quando renderiza o componente
 function getChat() {
   axios
     .get(`${baseApiUrl}/api/telegram/${store.state.user.key_bot}`)
@@ -30,6 +31,7 @@ function getNewMessages() {
       `${baseApiUrl}/api/telegram/get-new-messages/${store.state.user.key_bot}`
     )
     .then((resp) => {
+      // Buscar todas as novas mensagens salvas no DB e atualiza-las no front
       if (resp.data.length) store.dispatch("updateMessageUser", resp.data);
     })
     .catch((err) => {
@@ -41,17 +43,20 @@ function getNewMessages() {
 getChat();
 
 if (hasChat.value) {
+  // Estamos usando o setInterval para buscas as novas mensagens de 2 em 2 seg, mas futuramente alteraremos para salvar as mensagens usando WebHook
   const setInterv = setInterval(() => getNewMessages(), 2000);
 
   onUnmounted(() => {
+    // Remover o setInterval quando o componente for desmontando
     clearInterval(setInterv);
   });
 }
 
+// Conexão com o Backend em tempo real usando o socket io client
 const ioClient = io.connect(baseApiUrl, { withCredentials: false });
 
 ioClient.on("connect", (msg) => {
-  console.log("connected!", ioClient.id);
+  // console.log("connected!", ioClient.id);
   store.dispatch("setSocketIo", { socketId: ioClient.id });
 });
 
