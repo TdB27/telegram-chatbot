@@ -11,7 +11,7 @@ Projeto que permite aos usuários interagirem com chats ou grupos do Telegram at
 
 ## Como rodar o projeto
 
-- git clone https://github.com/TdB27/clone-knowledge-app.git
+- git clone https://github.com/TdB27/telegram-chatbot.git
 
 ### Back-end
 
