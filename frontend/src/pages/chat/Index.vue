@@ -11,6 +11,7 @@ import axios from "axios";
 const store = useStore();
 
 const hasChat = ref(false);
+const setInterv = ref({ hasInterv: false });
 
 // Buscar todas as mensagens salvas no DB quando renderiza o componente
 function getChat() {
@@ -35,22 +36,27 @@ function getNewMessages() {
       if (resp.data.length) store.dispatch("updateMessageUser", resp.data);
     })
     .catch((err) => {
-      clearInterval(setInterv);
+      clearInterval(setInterv.value.interv);
       defaultError(err.response.data);
     });
 }
 
 getChat();
 
-if (hasChat.value) {
-  // Estamos usando o setInterval para buscas as novas mensagens de 2 em 2 seg, mas futuramente alteraremos para salvar as mensagens usando WebHook
-  const setInterv = setInterval(() => getNewMessages(), 2000);
+watch(hasChat, () => {
+  if (hasChat.value) {
+    // Estamos usando o setInterval para buscas as novas mensagens de 2 em 2 seg, mas futuramente alteraremos para salvar as mensagens usando WebHook
+    setInterv.value = {
+      hasInterv: true,
+      interv: setInterval(() => getNewMessages(), 2000),
+    };
+  }
+});
 
-  onUnmounted(() => {
-    // Remover o setInterval quando o componente for desmontando
-    clearInterval(setInterv);
-  });
-}
+onUnmounted(() => {
+  // Remover o setInterval quando o componente for desmontando
+  if (setInterv.value.hasInterv) clearInterval(setInterv.value.interv);
+});
 
 // Conexão com o Backend em tempo real usando o socket io client
 const ioClient = io.connect(baseApiUrl, { withCredentials: false });

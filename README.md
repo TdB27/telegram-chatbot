@@ -21,6 +21,7 @@ git clone https://github.com/TdB27/telegram-chatbot.git
 
 - Fazer uma copia do arquivo env_file e renomeá-lo para .env
 - O banco utilizado para armazenar os logs é o PostgreSQL, então faz-se necessário criar um banco do PG com o mesmo nome descrito no campo 'database' no .env (Previamente o banco está com o nome de 'telegram_chatbot')
+- No arquivo .env, os campos user e password devem ter as credenciais do seu de banco de dados
 
 #### No terminal, rodar os seguintes comandos
 
