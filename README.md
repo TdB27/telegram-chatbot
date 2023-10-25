@@ -42,6 +42,8 @@ git clone https://github.com/TdB27/telegram-chatbot.git
 
 ## Futuras Features
 
+- [ ] - Implementar testes automatizados
+- [ ] - Buscar a imagem de perfil dos usuarios do bot
 - [ ] - Permitir que o comportamento adequado de imagens (tais como fotos, gifs, stickers, emojis enviadas pelo usuário) possam ser interpretadas corretamente pelo App
 - [ ] - Permitir que o sistema responda com imagens tais como descrita acima
 - [ ] - Enviar mensagens personalizadas e automatizadas para bot
