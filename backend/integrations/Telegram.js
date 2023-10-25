@@ -88,9 +88,12 @@ module.exports = class Telegram {
         };
       });
 
+      const firstName = filter[0].message.chat.first_name;
+      const lastName = filter[0].message.chat.last_name ?? "";
+
       return {
         chat_id: item,
-        name: `${filter[0].message.chat.first_name} ${filter[0].message.chat.last_name}`,
+        name: `${firstName} ${lastName}`,
         messages,
       };
     });
