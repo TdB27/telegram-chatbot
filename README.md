@@ -40,6 +40,27 @@ git clone https://github.com/TdB27/telegram-chatbot.git
 - Na tela de login o usuário padrão é: admin@admin.com e a senha: 1234
 - Para acessar as tecnologias usadas no Front-end [acesse aqui](https://github.com/TdB27/telegram-chatbot/blob/main/frontend/README.md)
 
+## Screenshot
+
+### Login
+
+<p>    
+    <img src="https://github.com/TdB27/telegram-chatbot/blob/main/screenshots/login.png" width="375" alt="Login">
+</p>
+
+### Chat
+
+<p>    
+    <img src="https://github.com/TdB27/telegram-chatbot/blob/main/screenshots/chat.png" width="375" alt="Login">
+    <img src="https://github.com/TdB27/telegram-chatbot/blob/main/screenshots/botUserSelectted.png" width="375" alt="Login">
+</p>
+
+### Tela de Cadastro de Usuários
+
+<p>    
+    <img src="https://github.com/TdB27/telegram-chatbot/blob/main/screenshots/register.png" width="375" alt="Login">
+</p>
+
 ## Futuras Features
 
 - [ ] - Implementar testes automatizados
