@@ -2,7 +2,7 @@
 import Sidebar from "./sidebar/SideBar.vue";
 import Content from "./content/Content.vue";
 
-import { onUnmounted, ref } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { baseApiUrl } from "../../global";
 import { defaultSuccess, defaultError } from "../../config/msgs";

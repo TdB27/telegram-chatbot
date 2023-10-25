@@ -17,6 +17,7 @@ function signin() {
     .post(`${baseApiUrl}/signin`, form.value)
     .then((resp) => {
       store.dispatch("setUser", { ...resp.data });
+      store.dispatch("selectUserBot", {});
       localStorage.setItem(userKey, JSON.stringify(resp.data));
 
       router.push({ path: "/chat" });
@@ -46,7 +47,11 @@ onUnmounted(() => {
       </div>
       <div class="form-group mb-4">
         <label for="name">Senha</label>
-        <input type="password" v-model="form.password" class="form-control" />
+        <input
+          type="password"
+          @keyup.enter="signin"
+          v-model="form.password"
+          class="form-control" />
       </div>
       <div class="d-flex justify-content-center">
         <button type="button" @click="signin" class="btn btn-primary">

@@ -6,6 +6,10 @@ import Auth from "../pages/auth/Index.vue";
 
 const routes = [
   {
+    redirect: "/chat",
+    path: "/:catchAll(.*)",
+  },
+  {
     name: "chat",
     path: "/chat",
     component: Chat,
