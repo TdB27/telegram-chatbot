@@ -1,4 +1,6 @@
 module.exports = (app) => {
+  app.route("/on").get(app.controllers.AuthController.on);
+
   app.route("/users/:auth_user_id").get(app.controllers.UserController.get);
   app.route("/users").post(app.controllers.UserController.store);
 

@@ -9,5 +9,10 @@ module.exports = (app) => {
     return res.status(service.status).send(service.data ?? null);
   };
 
-  return { signin };
+  const on = async (req, res) => {
+    // Verificar se o servidor está on
+    return res.status(200).send(JSON.stringify('O servidor está on'));
+  };
+
+  return { signin, on };
 };
